@@ -17,3 +17,9 @@ docker-compose up -d
 - \docker-compose.yml\ - конфигурация Docker
 - \code/index.html\ - главная страница
 - \code/about.html\ - страница \"О проекте\"
+
+## 📸 Скриншоты работы
+- Главная страница: ![](screenshots/main.png)
+- Страница About: ![](screenshots/about.png)
+- Терминал: ![](screenshots/terminal.png)
+- GitHub репозиторий: ![](screenshots/github.png)

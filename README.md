@@ -34,23 +34,23 @@
 ## 📸 Скриншоты работы
 
 ### Этап 1: 
-![Этап 1](screenshots/step1.PNG)
+![Этап 1](screenshots/step1.png)
 
 ### Этап 2:   
-![Этап 2](screenshots/step2.PNG)
+![Этап 2](screenshots/step2.png)
 
 ### Этап 3: 
-![Этап 3](screenshots/step3.PNG)
+![Этап 3](screenshots/step3.png)
 
 ### Этап 4: 
 - **Этап 4.1:   
-![Этап 4.1](screenshots/step4-1.PNG)
+![Этап 4.1](screenshots/step4-1.png)
 
 - **Этап 4.2:   
-![Этап 4.2](screenshots/step4-2.PNG)
+![Этап 4.2](screenshots/step4-2.png)
 
 - **Этап 4.3: 
-![Этап 4.3](screenshots/step4-3.PNG)
+![Этап 4.3](screenshots/step4-3.png)
 
 ## 🎉 Результат
 **Сервер в Docker успешно запущен!** ✅  

@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Покупка билета в кино</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select, button { width: 100%; padding: 8px; margin: 5px 0; }
+        .radio-group, .checkbox-group { display: flex; gap: 15px; }
+        .radio-group label, .checkbox-group label { font-weight: normal; }
+        #result { margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Покупка билета в кино</h1>
+    
+    <form id="cinemaForm">
+        <div class="form-group">
+            <label for="name">Ваше имя:</label>
+            <input type="text" id="name" name="name" placeholder="Введите ваше имя" required>
+        </div>
+
+        <div class="form-group">
+            <label for="ticketCount">Количество билетов:</label>
+            <input type="number" id="ticketCount" name="ticketCount" min="1" max="10" value="1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="movie">Выберите фильм:</label>
+            <select id="movie" name="movie" required>
+                <option value="">-- Выберите фильм --</option>
+                <option value="avatar">Аватар: Путь воды</option>
+                <option value="oppenheimer">Оппенгеймер</option>
+                <option value="barbie">Барби</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="date">Дата сеанса:</label>
+            <input type="date" id="date" name="date" required>
+        </div>
+
+        <div class="form-group">
+            <label>Тип места:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="seatType" value="standard" required> Стандарт</label>
+                <label><input type="radio" name="seatType" value="comfort"> Комфорт</label>
+                <label><input type="radio" name="seatType" value="vip"> VIP</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Дополнительно:</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="extras" value="3d_glasses"> 3D очки</label>
+            </div>
+        </div>
+
+        <button type="submit">Купить билеты</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('cinemaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            let output = '<h3>Ваш заказ:</h3>';
+            
+            for (const [name, value] of formData.entries()) {
+                output += <p><b>:</b> </p>;
+            }
+            
+            document.getElementById('result').innerHTML = output;
+        });
+
+        function getFieldLabel(fieldName) {
+            const labels = {
+                'name': 'Имя',
+                'ticketCount': 'Количество билетов',
+                'movie': 'Фильм',
+                'date': 'Дата сеанса',
+                'seatType': 'Тип места',
+                'extras': '3D очки'
+            };
+            return labels[fieldName] || fieldName;
+        }
+    </script>
+</body>
+</html>

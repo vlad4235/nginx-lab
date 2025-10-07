@@ -17,11 +17,11 @@
 </head>
 <body>
     <div class="navigation">
-        <a href="index.php">🏠 На главную</a> | 
-        <a href="view.php">📊 Все заказы</a>
+        <a href="index.php">На главную</a> | 
+        <a href="view.php">Все заказы</a>
     </div>
 
-    <h1>🎬 Покупка билета в кино</h1>
+    <h1>Покупка билета в кино</h1>
     
     <form id="cinemaForm" action="process.php" method="POST">
         <div class="form-group">
@@ -71,16 +71,14 @@
             <textarea id="comments" name="comments" rows="3" placeholder="Особые пожелания..."></textarea>
         </div>
 
-        <button type="submit">🎟️ Купить билеты</button>
+        <button type="submit">Купить билеты</button>
     </form>
 
     <script>
-        // Устанавливаем минимальную дату - сегодня
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('date').min = today;
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("date").min = today;
 
-        // Alert перед отправкой (как требуется в задании)
-        document.getElementById('cinemaForm').addEventListener('submit', function(e) {
+        document.getElementById("cinemaForm").addEventListener("submit", function(e) {
             const name = this.name.value;
             const ticketCount = this.ticketCount.value;
             const movie = this.movie.options[this.movie.selectedIndex].text;

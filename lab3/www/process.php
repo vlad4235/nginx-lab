@@ -1,67 +1,45 @@
-﻿<?php
-session_start();
+﻿
 
-if (['REQUEST_METHOD'] === 'POST') {
-    \ = array();
+if ($_POST) {
+    $errors = array();
     
-    // Получаем и очищаем данные
-    \ = htmlspecialchars(trim(\['name'] ?? ''));
-    \ = intval(\['ticketCount'] ?? 1);
-    \ = htmlspecialchars(trim(\['movie'] ?? ''));
-    \ = htmlspecialchars(trim(\['date'] ?? ''));
-    \ = htmlspecialchars(trim(\['seatType'] ?? ''));
-    \ = htmlspecialchars(trim(\['comments'] ?? ''));
-    \ = \['extras'] ?? array();
+    $name = isset($_POST["name"]) ? trim($_POST["name"]) : "";
+    $ticketCount = isset($_POST["ticketCount"]) ? intval($_POST["ticketCount"]) : 1;
+    $movie = isset($_POST["movie"]) ? trim($_POST["movie"]) : "";
+    $date = isset($_POST["date"]) ? trim($_POST["date"]) : "";
+    $seatType = isset($_POST["seatType"]) ? trim($_POST["seatType"]) : "";
+    $comments = isset($_POST["comments"]) ? trim($_POST["comments"]) : "";
+    $extras = isset($_POST["extras"]) ? $_POST["extras"] : array();
 
-    // Валидация
-    if (empty(\)) {
-        \[] = "Имя не может быть пустым";
-    }
-    
-    if (\ < 1 || \ > 10) {
-        \[] = "Количество билетов должно быть от 1 до 10";
-    }
-    
-    if (empty(\)) {
-        \[] = "Выберите фильм";
-    }
-    
-    if (empty(\)) {
-        \[] = "Выберите дату сеанса";
-    }
-    
-    if (empty(\)) {
-        \[] = "Выберите тип места";
-    }
+    if (empty($name)) $errors[] = "Введите имя";
+    if ($ticketCount < 1 || $ticketCount > 10) $errors[] = "Билетов должно быть 1-10";
+    if (empty($movie)) $errors[] = "Выберите фильм";
+    if (empty($date)) $errors[] = "Выберите дату";
+    if (empty($seatType)) $errors[] = "Выберите место";
 
-    // Если есть ошибки - сохраняем в сессию и перенаправляем
-    if (!empty(\)) {
-        \['errors'] = \;
+    if ($errors) {
+        $_SESSION["errors"] = $errors;
         header("Location: index.php");
-        exit();
+        exit;
     }
 
-    // Сохраняем данные в сессию
-    \['form_data'] = array(
-        'name' => \,
-        'ticketCount' => \,
-        'movie' => \,
-        'date' => \,
-        'seatType' => \,
-        'comments' => \,
-        'extras' => \
+    $_SESSION["form_data"] = array(
+        "name" => $name,
+        "ticketCount" => $ticketCount,
+        "movie" => $movie,
+        "date" => $date,
+        "seatType" => $seatType,
+        "comments" => $comments,
+        "extras" => $extras
     );
 
-    // Сохраняем в файл
-    \ = date('Y-m-d H:i:s') . ";" . \ . ";" . \ . ";" . \ . ";" . \ . ";" . \ . ";" . implode(',', \) . ";" . \ . "\n";
-    file_put_contents("data.txt", \, FILE_APPEND);
+    $line = date("Y-m-d H:i:s") . ";" . $name . ";" . $ticketCount . ";" . $movie . ";" . $date . ";" . $seatType . ";" . implode(",", $extras) . ";" . $comments . "\n";
+    file_put_contents("data.txt", $line, FILE_APPEND);
 
-    // Перенаправляем на главную
     header("Location: index.php");
-    exit();
+    exit;
 } else {
-    // Если не POST запрос - на главную
     header("Location: index.php");
-    exit();
+    exit;
 }
 ?>

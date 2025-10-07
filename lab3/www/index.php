@@ -1,60 +1,51 @@
-﻿<?php session_start(); ?>
+﻿
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кинотеатр - Главная</title>
+    <title>Кинотеатр</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
-        .session-data { background: #f0f8ff; padding: 15px; margin: 20px 0; border-radius: 8px; }
-        .errors { background: #ffe6e6; padding: 15px; margin: 20px 0; border-radius: 8px; color: #d00; }
-        .navigation { margin: 20px 0; }
-        .navigation a { margin-right: 15px; text-decoration: none; color: #0066cc; }
+        body { font-family: Arial; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .data { background: #f0f0f0; padding: 15px; margin: 20px 0; }
+        .error { color: red; }
     </style>
 </head>
 <body>
-    <h1>🎬 Добро пожаловать в кинотеатр!</h1>
+    <h1>Кинотеатр - Главная</h1>
     
-    <div class="navigation">
-        <a href="form.html">🎟️ Заполнить форму заказа</a> | 
-        <a href="view.php">📊 Посмотреть все заказы</a>
+    <div>
+        <a href="form.html">Заполнить форму</a> | 
+        <a href="view.php">Все заказы</a>
     </div>
 
-    <?php if(isset(['errors'])): ?>
-        <div class="errors">
-            <h3>❌ Ошибки:</h3>
-            <ul>
-                <?php foreach(['errors'] as ): ?>
-                    <li><?php echo htmlspecialchars(); ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-        <?php unset(['errors']); ?>
-    <?php endif; ?>
+    <?php 
+    if(isset($_SESSION["errors"])) {
+        echo "<div class=\"error\">";
+        echo "<h3>Ошибки:</h3>";
+        echo "<ul>";
+        foreach($_SESSION["errors"] as $error) {
+            echo "<li>" . $error . "</li>";
+        }
+        echo "</ul>";
+        echo "</div>";
+        unset($_SESSION["errors"]);
+    }
 
-    <?php if(isset(['form_data'])): ?>
-        <div class="session-data">
-            <h3>✅ Последний заказ:</h3>
-            <ul>
-                <li><strong>👤 Имя:</strong> <?php echo htmlspecialchars(['form_data']['name']); ?></li>
-                <li><strong>🎟️ Билетов:</strong> <?php echo htmlspecialchars(['form_data']['ticketCount']); ?></li>
-                <li><strong>🎬 Фильм:</strong> <?php echo htmlspecialchars(['form_data']['movie']); ?></li>
-                <li><strong>📅 Дата:</strong> <?php echo htmlspecialchars(['form_data']['date']); ?></li>
-                <li><strong>💺 Место:</strong> <?php echo htmlspecialchars(['form_data']['seatType']); ?></li>
-                <li><strong>🎁 Дополнительно:</strong> <?php echo !empty(['form_data']['extras']) ? implode(', ', ['form_data']['extras']) : 'нет'; ?></li>
-                <?php if(!empty(['form_data']['comments'])): ?>
-                    <li><strong>💬 Комментарий:</strong> <?php echo htmlspecialchars(['form_data']['comments']); ?></li>
-                <?php endif; ?>
-            </ul>
-        </div>
-        <?php unset(['form_data']); ?>
-    <?php else: ?>
-        <p>📝 Заказов пока нет. Заполните форму!</p>
-    <?php endif; ?>
+    if(isset($_SESSION["form_data"])) {
+        echo "<div class=\"data\">";
+        echo "<h3>Последний заказ:</h3>";
+        echo "<p>Имя: " . $_SESSION["form_data"]["name"] . "</p>";
+        echo "<p>Билетов: " . $_SESSION["form_data"]["ticketCount"] . "</p>";
+        echo "<p>Фильм: " . $_SESSION["form_data"]["movie"] . "</p>";
+        echo "<p>Дата: " . $_SESSION["form_data"]["date"] . "</p>";
+        echo "<p>Место: " . $_SESSION["form_data"]["seatType"] . "</p>";
+        echo "</div>";
+        unset($_SESSION["form_data"]);
+    } else {
+        echo "<p>Заказов пока нет. Заполните форму!</p>";
+    }
+    ?>
 
-    <hr>
-    <h2>🐘 Информация о PHP</h2>
-    <p><a href="phpinfo.php">Посмотреть phpinfo()</a></p>
+    <p><a href="phpinfo.php">PHP информация</a></p>
 </body>
 </html>

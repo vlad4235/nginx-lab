@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Покупка билета в кино</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select, button, textarea { width: 100%; padding: 8px; margin: 5px 0; }
+        .radio-group, .checkbox-group { display: flex; gap: 15px; }
+        .radio-group label, .checkbox-group label { font-weight: normal; }
+        .navigation { margin-bottom: 20px; }
+        .navigation a { margin-right: 15px; text-decoration: none; color: #0066cc; }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <a href="index.php">🏠 На главную</a> | 
+        <a href="view.php">📊 Все заказы</a>
+    </div>
+
+    <h1>🎬 Покупка билета в кино</h1>
+    
+    <form id="cinemaForm" action="process.php" method="POST">
+        <div class="form-group">
+            <label for="name">Ваше имя:</label>
+            <input type="text" id="name" name="name" placeholder="Введите ваше имя" required>
+        </div>
+
+        <div class="form-group">
+            <label for="ticketCount">Количество билетов:</label>
+            <input type="number" id="ticketCount" name="ticketCount" min="1" max="10" value="1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="movie">Выберите фильм:</label>
+            <select id="movie" name="movie" required>
+                <option value="">-- Выберите фильм --</option>
+                <option value="avatar">Аватар: Путь воды</option>
+                <option value="oppenheimer">Оппенгеймер</option>
+                <option value="barbie">Барби</option>
+                <option value="john_wick">Джон Уик 4</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="date">Дата сеанса:</label>
+            <input type="date" id="date" name="date" required>
+        </div>
+
+        <div class="form-group">
+            <label>Тип места:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="seatType" value="standard" required> Стандарт</label>
+                <label><input type="radio" name="seatType" value="comfort"> Комфорт</label>
+                <label><input type="radio" name="seatType" value="vip"> VIP</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Дополнительно:</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="extras[]" value="3d_glasses"> 3D очки</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="comments">Комментарий к заказу:</label>
+            <textarea id="comments" name="comments" rows="3" placeholder="Особые пожелания..."></textarea>
+        </div>
+
+        <button type="submit">🎟️ Купить билеты</button>
+    </form>
+
+    <script>
+        // Устанавливаем минимальную дату - сегодня
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('date').min = today;
+
+        // Alert перед отправкой (как требуется в задании)
+        document.getElementById('cinemaForm').addEventListener('submit', function(e) {
+            const name = this.name.value;
+            const ticketCount = this.ticketCount.value;
+            const movie = this.movie.options[this.movie.selectedIndex].text;
+            
+            alert("Вы ввели:\nИмя: " + name + "\nБилетов: " + ticketCount + "\nФильм: " + movie);
+        });
+    </script>
+</body>
+</html>

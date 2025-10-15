@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Форма заказа билетов</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .form-group { margin: 15px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #007cba; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #005a87; }
+    </style>
+</head>
+<body>
+    <h1>Форма заказа билетов в кино</h1>
+    <a href="http://localhost:8082/index.php">На главную</a>
+    <hr>
+
+    <form id="demoForm" action="http://localhost:8082/process.php" method="POST">
+        <div class="form-group">
+            <label for="name">Ваше имя:</label>
+            <input type="text" id="name" name="name" placeholder="Введите ваше имя" required>
+        </div>
+
+        <div class="form-group">
+            <label for="ticketCount">Количество билетов:</label>
+            <select id="ticketCount" name="ticketCount" required>
+                <option value="">Выберите количество</option>
+                <option value="1">1 билет</option>
+                <option value="2">2 билета</option>
+                <option value="3">3 билета</option>
+                <option value="4">4 билета</option>
+                <option value="5">5 билетов</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="movie">Выберите фильм:</label>
+            <select id="movie" name="movie" required>
+                <option value="">Выберите фильм</option>
+                <option value="Аватар 2">Аватар 2</option>
+                <option value="Оппенгеймер">Оппенгеймер</option>
+                <option value="Барби">Барби</option>
+                <option value="Дюна">Дюна</option>
+                <option value="Джон Уик 4">Джон Уик 4</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="date">Дата сеанса:</label>
+            <input type="date" id="date" name="date" required>
+        </div>
+
+        <div class="form-group">
+            <label>Тип места:</label>
+            <div>
+                <input type="radio" id="standard" name="seatType" value="Стандарт" required>
+                <label for="standard" style="display: inline;">Стандарт</label>
+                
+                <input type="radio" id="vip" name="seatType" value="VIP">
+                <label for="vip" style="display: inline;">VIP</label>
+                
+                <input type="radio" id="sofa" name="seatType" value="Диван">
+                <label for="sofa" style="display: inline;">Диван</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Дополнительные опции:</label>
+            <div>
+                <input type="checkbox" id="popcorn" name="extras[]" value="Попкорн">
+                <label for="popcorn" style="display: inline;">Попкорн</label>
+                
+                <input type="checkbox" id="drink" name="extras[]" value="Напиток">
+                <label for="drink" style="display: inline;">Напиток</label>
+                
+                <input type="checkbox" id="glasses" name="extras[]" value="3D очки">
+                <label for="glasses" style="display: inline;">3D очки</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="comments">Комментарий:</label>
+            <textarea id="comments" name="comments" rows="3" placeholder="Ваши пожелания..."></textarea>
+        </div>
+
+        <button type="submit">Отправить заказ</button>
+    </form>
+
+    <script>
+        document.getElementById("demoForm").addEventListener("submit", function(e){
+            const name = document.querySelector("[name='name']").value;
+            const ticketCount = document.querySelector("[name='ticketCount']").value;
+            const movie = document.querySelector("[name='movie']").value;
+            
+            alert("Ваш заказ:\nИмя: " + name + "\nБилетов: " + ticketCount + "\nФильм: " + movie + "\n\nОтправляем на сервер...");
+        });
+    </script>
+</body>
+</html>

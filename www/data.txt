@@ -1,0 +1,10 @@
+2025-10-07 20:35:44;Владислав;1;avatar;2025-10-07;comfort;3d_glasses;
+2025-10-15 13:16:51;Даниил;2;barbie;2025-10-15;standard;3d_glasses;
+2025-10-15 13:26:38;tobias;1;john_wick;2025-10-15;comfort;3d_glasses;
+2025-10-15 13:28:10;Даниил;3;barbie;2025-10-16;vip;3d_glasses;
+2025-10-15 13:32:21;Владислав;5;barbie;2025-10-17;standard;3d_glasses;
+2025-10-15 15:42:45;Владислав;2;john_wick;2025-10-15;vip;3d_glasses;
+2025-10-15 15:53:21;Владислав;2;john_wick;2025-10-15;vip;3d_glasses;
+2025-10-15 16:16:52;Владислав;4;avatar;2025-10-15;standard;;
+2025-10-15 16:21:14;Владислав;3;oppenheimer;2025-10-16;vip;3d_glasses;
+2025-10-15 16:34:58;Владислав;5;oppenheimer;2025-10-16;comfort;3d_glasses;

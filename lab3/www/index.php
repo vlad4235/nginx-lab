@@ -1,51 +1,69 @@
-﻿
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Кинотеатр</title>
+    <title>Кинотеатр - Главная</title>
     <style>
         body { font-family: Arial; max-width: 800px; margin: 50px auto; padding: 20px; }
-        .data { background: #f0f0f0; padding: 15px; margin: 20px 0; }
-        .error { color: red; }
+        .data { background: #f0f8ff; padding: 15px; margin: 20px 0; border-radius: 8px; }
+        .error { background: #ffe6e6; padding: 15px; margin: 20px 0; border-radius: 8px; color: #d00; }
+        a { color: #007cba; text-decoration: none; margin: 0 10px; }
+        a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
-    <h1>Кинотеатр - Главная</h1>
-    
+    <h1>Кинотеатр - Главная страница</h1>
+
     <div>
-        <a href="form.html">Заполнить форму</a> | 
-        <a href="view.php">Все заказы</a>
+        <a href="http://localhost:8082/form.html">Заполнить форму заказа</a> |
+        <a href="http://localhost:8082/view.php">Все заказы</a>
     </div>
 
-    <?php 
-    if(isset($_SESSION["errors"])) {
-        echo "<div class=\"error\">";
-        echo "<h3>Ошибки:</h3>";
-        echo "<ul>";
-        foreach($_SESSION["errors"] as $error) {
-            echo "<li>" . $error . "</li>";
-        }
-        echo "</ul>";
-        echo "</div>";
-        unset($_SESSION["errors"]);
-    }
+    <hr>
 
-    if(isset($_SESSION["form_data"])) {
-        echo "<div class=\"data\">";
-        echo "<h3>Последний заказ:</h3>";
-        echo "<p>Имя: " . $_SESSION["form_data"]["name"] . "</p>";
-        echo "<p>Билетов: " . $_SESSION["form_data"]["ticketCount"] . "</p>";
-        echo "<p>Фильм: " . $_SESSION["form_data"]["movie"] . "</p>";
-        echo "<p>Дата: " . $_SESSION["form_data"]["date"] . "</p>";
-        echo "<p>Место: " . $_SESSION["form_data"]["seatType"] . "</p>";
-        echo "</div>";
-        unset($_SESSION["form_data"]);
-    } else {
-        echo "<p>Заказов пока нет. Заполните форму!</p>";
-    }
-    ?>
+    <?php if (isset($_SESSION['errors']) && !empty($_SESSION['errors'])): ?>
+        <div class="error">
+            <h3>Ошибки в форме:</h3>
+            <ul>
+                <?php foreach ($_SESSION['errors'] as $error): ?>
+                    <li><?= $error ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <?php unset($_SESSION['errors']); ?>
+    <?php endif; ?>
 
-    <p><a href="phpinfo.php">PHP информация</a></p>
+    <?php if (isset($_SESSION['form_data']) && !empty($_SESSION['form_data'])): ?>
+        <?php $data = $_SESSION['form_data']; ?>
+        <div class="data">
+            <h3>Последний заказ:</h3>
+            <p><strong>Имя:</strong> <?= $data['name'] ?></p>
+            <p><strong>Билетов:</strong> <?= $data['ticketCount'] ?></p>
+            <p><strong>Фильм:</strong> <?= $data['movie'] ?></p>
+            <p><strong>Дата сеанса:</strong> <?= $data['date'] ?></p>
+            <p><strong>Тип места:</strong> <?= $data['seatType'] ?></p>
+            
+            <?php if (!empty($data['extras'])): ?>
+                <p><strong>Дополнительно:</strong> <?= implode(', ', $data['extras']) ?></p>
+            <?php else: ?>
+                <p><strong>Дополнительно:</strong> нет</p>
+            <?php endif; ?>
+            
+            <?php if (!empty($data['comments'])): ?>
+                <p><strong>Комментарий:</strong> <?= $data['comments'] ?></p>
+            <?php endif; ?>
+        </div>
+        <?php unset($_SESSION['form_data']); ?>
+    <?php else: ?>
+        <p>Заказов пока нет. Заполните форму заказа!</p>
+    <?php endif; ?>
+
+    <hr>
+    <p><a href="http://localhost:8082/phpinfo.php">Информация о PHP</a></p>
 </body>
 </html>

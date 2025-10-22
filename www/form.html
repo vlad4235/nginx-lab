@@ -1,101 +1,93 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Форма заказа билетов</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бронирование билетов в кино</title>
     <style>
-        body { font-family: Arial; max-width: 600px; margin: 50px auto; padding: 20px; }
-        .form-group { margin: 15px 0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
-        button { background: #007cba; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #005a87; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        button { background: #007bff; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; }
+        .error { color: red; margin-top: 5px; }
     </style>
 </head>
 <body>
-    <h1>Форма заказа билетов в кино</h1>
-    <a href="http://localhost:8082/index.php">На главную</a>
-    <hr>
+    <div class="container">
+        <h1>🎫 Бронирование билетов в кино</h1>
+        
+        <nav>
+            <a href="index.php">🏠 Главная</a> | 
+            <a href="view.php">📋 Все заказы</a> |
+            <a href="api.php">🎬 TVMaze API</a>
+        </nav>
 
-    <form id="demoForm" action="http://localhost:8082/process.php" method="POST">
-        <div class="form-group">
-            <label for="name">Ваше имя:</label>
-            <input type="text" id="name" name="name" placeholder="Введите ваше имя" required>
-        </div>
-
-        <div class="form-group">
-            <label for="ticketCount">Количество билетов:</label>
-            <select id="ticketCount" name="ticketCount" required>
-                <option value="">Выберите количество</option>
-                <option value="1">1 билет</option>
-                <option value="2">2 билета</option>
-                <option value="3">3 билета</option>
-                <option value="4">4 билета</option>
-                <option value="5">5 билетов</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="movie">Выберите фильм:</label>
-            <select id="movie" name="movie" required>
-                <option value="">Выберите фильм</option>
-                <option value="Аватар 2">Аватар 2</option>
-                <option value="Оппенгеймер">Оппенгеймер</option>
-                <option value="Барби">Барби</option>
-                <option value="Дюна">Дюна</option>
-                <option value="Джон Уик 4">Джон Уик 4</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="date">Дата сеанса:</label>
-            <input type="date" id="date" name="date" required>
-        </div>
-
-        <div class="form-group">
-            <label>Тип места:</label>
-            <div>
-                <input type="radio" id="standard" name="seatType" value="Стандарт" required>
-                <label for="standard" style="display: inline;">Стандарт</label>
-                
-                <input type="radio" id="vip" name="seatType" value="VIP">
-                <label for="vip" style="display: inline;">VIP</label>
-                
-                <input type="radio" id="sofa" name="seatType" value="Диван">
-                <label for="sofa" style="display: inline;">Диван</label>
+        <form action="process.php" method="POST">
+            <div class="form-group">
+                <label for="name">👤 Ваше имя:</label>
+                <input type="text" id="name" name="name" required>
             </div>
-        </div>
-
-        <div class="form-group">
-            <label>Дополнительные опции:</label>
-            <div>
-                <input type="checkbox" id="popcorn" name="extras[]" value="Попкорн">
-                <label for="popcorn" style="display: inline;">Попкорн</label>
-                
-                <input type="checkbox" id="drink" name="extras[]" value="Напиток">
-                <label for="drink" style="display: inline;">Напиток</label>
-                
-                <input type="checkbox" id="glasses" name="extras[]" value="3D очки">
-                <label for="glasses" style="display: inline;">3D очки</label>
+            
+            <div class="form-group">
+                <label for="tickets">🎟️ Количество билетов (1-10):</label>
+                <input type="number" id="tickets" name="tickets" min="1" max="10" value="1" required>
             </div>
-        </div>
-
-        <div class="form-group">
-            <label for="comments">Комментарий:</label>
-            <textarea id="comments" name="comments" rows="3" placeholder="Ваши пожелания..."></textarea>
-        </div>
-
-        <button type="submit">Отправить заказ</button>
-    </form>
+            
+            <div class="form-group">
+                <label for="movie">🎬 Выберите фильм:</label>
+                <select id="movie" name="movie" required>
+                    <option value="">-- Выберите фильм --</option>
+                    <option value="Аватар: Путь воды">Аватар: Путь воды</option>
+                    <option value="Матрица: Воскрешение">Матрица: Воскрешение</option>
+                    <option value="Оппенгеймер">Оппенгеймер</option>
+                    <option value="Барби">Барби</option>
+                    <option value="Интерстеллар">Интерстеллар</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="date">📅 Дата сеанса:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            
+            <div class="form-group">
+                <label>💺 Тип места:</label>
+                <div>
+                    <input type="radio" id="standard" name="seat" value="Стандарт" required>
+                    <label for="standard" style="display: inline;">Стандарт</label>
+                    
+                    <input type="radio" id="vip" name="seat" value="VIP">
+                    <label for="vip" style="display: inline;">VIP</label>
+                    
+                    <input type="radio" id="balcony" name="seat" value="Балкон">
+                    <label for="balcony" style="display: inline;">Балкон</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <input type="checkbox" id="glasses" name="glasses" value="yes">
+                <label for="glasses" style="display: inline;">🕶️ 3D очки (+200 руб)</label>
+            </div>
+            
+            <div class="form-group">
+                <label for="comment">📝 Комментарий (необязательно):</label>
+                <textarea id="comment" name="comment" rows="3"></textarea>
+            </div>
+            
+            <button type="submit">🎫 Забронировать билеты</button>
+        </form>
+    </div>
 
     <script>
-        document.getElementById("demoForm").addEventListener("submit", function(e){
-            const name = document.querySelector("[name='name']").value;
-            const ticketCount = document.querySelector("[name='ticketCount']").value;
-            const movie = document.querySelector("[name='movie']").value;
-            
-            alert("Ваш заказ:\nИмя: " + name + "\nБилетов: " + ticketCount + "\nФильм: " + movie + "\n\nОтправляем на сервер...");
-        });
+        // Устанавливаем минимальную дату - сегодня
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('date').min = today;
+        
+        // Устанавливаем дату по умолчанию - завтра
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById('date').value = tomorrow.toISOString().split('T')[0];
     </script>
 </body>
 </html>

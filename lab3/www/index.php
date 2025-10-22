@@ -1,69 +1,139 @@
-<?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+﻿<?php
+session_start();
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// Инициализируем классы
+$userInfo = new UserInfo();
+$apiClient = new ApiClient();
+
+// Получаем данные API если их еще нет в сессии
+if (!isset($_SESSION['api_data'])) {
+    $_SESSION['api_data'] = $apiClient->searchShows('action');
 }
 ?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Кинотеатр - Главная</title>
     <style>
-        body { font-family: Arial; max-width: 800px; margin: 50px auto; padding: 20px; }
-        .data { background: #f0f8ff; padding: 15px; margin: 20px 0; border-radius: 8px; }
-        .error { background: #ffe6e6; padding: 15px; margin: 20px 0; border-radius: 8px; color: #d00; }
-        a { color: #007cba; text-decoration: none; margin: 0 10px; }
-        a:hover { text-decoration: underline; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .order-info { background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; }
+        .api-section { background: #e8f4fd; padding: 20px; border-radius: 10px; margin: 20px 0; }
+        .user-info { background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .movie-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
+        .movie-card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: white; }
+        .movie-card img { max-width: 100%; height: auto; border-radius: 5px; }
+        .success-message { background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin: 15px 0; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
     </style>
 </head>
 <body>
-    <h1>Кинотеатр - Главная страница</h1>
+    <div class="container">
+        <h1>🎬 Кинотеатр - Главная страница</h1>
+        
+        <?php if (isset($_SESSION['success_message'])): ?>
+            <div class="success-message">
+                <?= htmlspecialchars($_SESSION['success_message']) ?>
+                <?php unset($_SESSION['success_message']); ?>
+            </div>
+        <?php endif; ?>
 
-    <div>
-        <a href="http://localhost:8082/form.html">Заполнить форму заказа</a> |
-        <a href="http://localhost:8082/view.php">Все заказы</a>
-    </div>
-
-    <hr>
-
-    <?php if (isset($_SESSION['errors']) && !empty($_SESSION['errors'])): ?>
-        <div class="error">
-            <h3>Ошибки в форме:</h3>
-            <ul>
-                <?php foreach ($_SESSION['errors'] as $error): ?>
-                    <li><?= $error ?></li>
+        <!-- 🔥 НОВЫЙ РАЗДЕЛ: Информация о пользователе -->
+        <div class="user-info">
+            <h3>ℹ️ Информация о системе и пользователе</h3>
+            <div class="info-grid">
+                <?php
+                $info = UserInfo::getInfo();
+                foreach ($info as $key => $value): 
+                ?>
+                    <div>
+                        <strong><?= htmlspecialchars($key) ?>:</strong><br>
+                        <?= htmlspecialchars($value) ?>
+                    </div>
                 <?php endforeach; ?>
-            </ul>
+                
+                <!-- Информация о куки -->
+                <?php if (isset($_COOKIE['last_order_time'])): ?>
+                    <div>
+                        <strong>🍪 Последний заказ:</strong><br>
+                        <?= htmlspecialchars($_COOKIE['last_order_time']) ?>
+                    </div>
+                <?php endif; ?>
+                
+                <div>
+                    <strong>🌐 Браузер:</strong><br>
+                    <?= htmlspecialchars(UserInfo::getBrowserInfo()) ?>
+                </div>
+            </div>
         </div>
-        <?php unset($_SESSION['errors']); ?>
-    <?php endif; ?>
 
-    <?php if (isset($_SESSION['form_data']) && !empty($_SESSION['form_data'])): ?>
-        <?php $data = $_SESSION['form_data']; ?>
-        <div class="data">
-            <h3>Последний заказ:</h3>
-            <p><strong>Имя:</strong> <?= $data['name'] ?></p>
-            <p><strong>Билетов:</strong> <?= $data['ticketCount'] ?></p>
-            <p><strong>Фильм:</strong> <?= $data['movie'] ?></p>
-            <p><strong>Дата сеанса:</strong> <?= $data['date'] ?></p>
-            <p><strong>Тип места:</strong> <?= $data['seatType'] ?></p>
+        <!-- Существующая информация о заказе -->
+        <?php if (isset($_SESSION['last_order'])): ?>
+        <div class="order-info">
+            <h2>Ваш последний заказ:</h2>
+            <p><strong>Имя:</strong> <?= htmlspecialchars($_SESSION['last_order']['name']) ?></p>
+            <p><strong>Билетов:</strong> <?= htmlspecialchars($_SESSION['last_order']['tickets']) ?></p>
+            <p><strong>Фильм:</strong> <?= htmlspecialchars($_SESSION['last_order']['movie']) ?></p>
+            <p><strong>Дата:</strong> <?= htmlspecialchars($_SESSION['last_order']['date']) ?></p>
+            <p><strong>Место:</strong> <?= htmlspecialchars($_SESSION['last_order']['seat']) ?></p>
+            <p><strong>3D очки:</strong> <?= htmlspecialchars($_SESSION['last_order']['glasses']) ?></p>
+            <p><strong>Комментарий:</strong> <?= htmlspecialchars($_SESSION['last_order']['comment']) ?></p>
+            <p><strong>Время заказа:</strong> <?= htmlspecialchars($_SESSION['last_order']['timestamp']) ?></p>
+        </div>
+        <?php else: ?>
+        <div class="order-info">
+            <p>У вас еще нет заказов. <a href="form.html">Забронируйте билеты!</a></p>
+        </div>
+        <?php endif; ?>
+
+        <!-- 🔥 НОВЫЙ РАЗДЕЛ: Данные из внешнего API -->
+        <div class="api-section">
+            <h2>🎭 Популярные сериалы (данные из TVMaze API)</h2>
+            <p><em>Данные загружаются из публичного API в реальном времени</em></p>
             
-            <?php if (!empty($data['extras'])): ?>
-                <p><strong>Дополнительно:</strong> <?= implode(', ', $data['extras']) ?></p>
+            <?php if (isset($_SESSION['api_data']) && is_array($_SESSION['api_data'])): ?>
+                <div class="movie-grid">
+                    <?php foreach ($_SESSION['api_data'] as $item): 
+                        $show = $item['show'] ?? $item;
+                    ?>
+                        <div class="movie-card">
+                            <?php if (isset($show['image']['medium'])): ?>
+                                <img src="<?= htmlspecialchars($show['image']['medium']) ?>" 
+                                     alt="<?= htmlspecialchars($show['name'] ?? 'Unknown') ?>">
+                            <?php else: ?>
+                                <div style="background: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; color: #666;">
+                                    🎬 Нет изображения
+                                </div>
+                            <?php endif; ?>
+                            
+                            <h4><?= htmlspecialchars($show['name'] ?? 'Unknown') ?></h4>
+                            
+                            <?php if (isset($show['genres']) && is_array($show['genres'])): ?>
+                                <p><small><strong>Жанры:</strong> <?= htmlspecialchars(implode(', ', $show['genres'])) ?></small></p>
+                            <?php endif; ?>
+                            
+                            <?php if (isset($show['rating']['average'])): ?>
+                                <p><small><strong>⭐ Рейтинг:</strong> <?= htmlspecialchars($show['rating']['average']) ?>/10</small></p>
+                            <?php endif; ?>
+                            
+                            <?php if (isset($show['premiered'])): ?>
+                                <p><small><strong>📅 Премьера:</strong> <?= htmlspecialchars(substr($show['premiered'], 0, 4)) ?></small></p>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             <?php else: ?>
-                <p><strong>Дополнительно:</strong> нет</p>
-            <?php endif; ?>
-            
-            <?php if (!empty($data['comments'])): ?>
-                <p><strong>Комментарий:</strong> <?= $data['comments'] ?></p>
+                <p>Не удалось загрузить данные из API.</p>
             <?php endif; ?>
         </div>
-        <?php unset($_SESSION['form_data']); ?>
-    <?php else: ?>
-        <p>Заказов пока нет. Заполните форму заказа!</p>
-    <?php endif; ?>
 
-    <hr>
-    <p><a href="http://localhost:8082/phpinfo.php">Информация о PHP</a></p>
+        <nav>
+            <a href="form.html">🎫 Забронировать билеты</a> | 
+            <a href="view.php">📋 Посмотреть все заказы</a> |
+            <a href="phpinfo.php">🐘 PHP Info</a>
+        </nav>
+    </div>
 </body>
 </html>

@@ -1,4 +1,7 @@
-﻿<?php
+<?php
+// Добавляем output buffering в самое начало
+if (ob_get_level() == 0) ob_start();
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -54,15 +57,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         setcookie("user_session", session_id(), time() + 3600, "/");
         
         $_SESSION['success_message'] = "Билеты успешно забронированы!";
+        
+        // Очищаем буфер перед header
+        if (ob_get_level() > 0) ob_end_clean();
         header('Location: index.php');
         exit();
     } else {
         $_SESSION['form_errors'] = $errors;
         $_SESSION['form_data'] = $_POST;
+        
+        // Очищаем буфер перед header
+        if (ob_get_level() > 0) ob_end_clean();
         header('Location: form.html');
         exit();
     }
 } else {
+    // Очищаем буфер перед header
+    if (ob_get_level() > 0) ob_end_clean();
     header('Location: form.html');
     exit();
 }

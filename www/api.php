@@ -1,4 +1,7 @@
-﻿<?php
+<?php
+// Добавляем output buffering в самое начало
+if (ob_get_level() == 0) ob_start();
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }

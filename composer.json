@@ -1,0 +1,21 @@
+﻿{
+    "name": "vlad4235/lab3",
+    "description": "Laboratory work #3: Form processing with Composer and API integration",
+    "type": "project",
+    "require": {
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "authors": [
+        {
+            "name": "Константинов Владислав Алексеевич",
+            "email": "vlad@example.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "files": [
+            "www/ApiClient.php",
+            "www/UserInfo.php"
+        ]
+    }
+}

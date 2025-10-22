@@ -1,6 +1,11 @@
 ﻿<?php
-session_start();
-require_once __DIR__ . '/../vendor/autoload.php';
+// Переносим session_start в самое начало
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Используем упрощенный автозагрузчик
+require_once __DIR__ . '/autoload.php';
 
 $apiClient = new ApiClient();
 $userInfo = new UserInfo();
@@ -23,6 +28,7 @@ $dramaShows = $apiClient->searchShows('drama');
         .movie-card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .movie-card img { width: 100%; height: 300px; object-fit: cover; border-radius: 5px; }
         .api-info { background: #e8f4fd; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .error { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin: 15px 0; }
     </style>
 </head>
 <body>
@@ -46,13 +52,25 @@ $dramaShows = $apiClient->searchShows('drama');
         <!-- Экшн сериалы -->
         <div class="category-section">
             <h2>💥 Экшн сериалы</h2>
+            <?php if (isset($actionShows['error'])): ?>
+                <div class="error">
+                    <p>Ошибка при загрузке данных: <?= htmlspecialchars($actionShows['error']) ?></p>
+                    <p>Показываем демо-данные</p>
+                </div>
+            <?php endif; ?>
             <div class="movie-grid">
-                <?php foreach (array_slice($actionShows, 0, 4) as $item): 
+                <?php 
+                $showsToDisplay = isset($actionShows['error']) ? $apiClient->getFallbackData() : array_slice($actionShows, 0, 4);
+                foreach ($showsToDisplay as $item): 
                     $show = $item['show'] ?? $item;
                 ?>
                     <div class="movie-card">
                         <?php if (isset($show['image']['medium'])): ?>
                             <img src="<?= htmlspecialchars($show['image']['medium']) ?>" alt="<?= htmlspecialchars($show['name']) ?>">
+                        <?php else: ?>
+                            <div style="background: #f0f0f0; height: 300px; display: flex; align-items: center; justify-content: center; color: #666;">
+                                🎬 Нет изображения
+                            </div>
                         <?php endif; ?>
                         <h3><?= htmlspecialchars($show['name'] ?? 'Unknown') ?></h3>
                         <?php if (isset($show['genres'])): ?>
@@ -69,13 +87,24 @@ $dramaShows = $apiClient->searchShows('drama');
         <!-- Комедийные сериалы -->
         <div class="category-section">
             <h2>😂 Комедийные сериалы</h2>
+            <?php if (isset($comedyShows['error'])): ?>
+                <div class="error">
+                    <p>Ошибка при загрузке данных: <?= htmlspecialchars($comedyShows['error']) ?></p>
+                </div>
+            <?php endif; ?>
             <div class="movie-grid">
-                <?php foreach (array_slice($comedyShows, 0, 4) as $item): 
+                <?php 
+                $showsToDisplay = isset($comedyShows['error']) ? [] : array_slice($comedyShows, 0, 4);
+                foreach ($showsToDisplay as $item): 
                     $show = $item['show'] ?? $item;
                 ?>
                     <div class="movie-card">
                         <?php if (isset($show['image']['medium'])): ?>
                             <img src="<?= htmlspecialchars($show['image']['medium']) ?>" alt="<?= htmlspecialchars($show['name']) ?>">
+                        <?php else: ?>
+                            <div style="background: #f0f0f0; height: 300px; display: flex; align-items: center; justify-content: center; color: #666;">
+                                🎬 Нет изображения
+                            </div>
                         <?php endif; ?>
                         <h3><?= htmlspecialchars($show['name'] ?? 'Unknown') ?></h3>
                         <?php if (isset($show['genres'])): ?>
@@ -89,13 +118,24 @@ $dramaShows = $apiClient->searchShows('drama');
         <!-- Драматические сериалы -->
         <div class="category-section">
             <h2>🎭 Драматические сериалы</h2>
+            <?php if (isset($dramaShows['error'])): ?>
+                <div class="error">
+                    <p>Ошибка при загрузке данных: <?= htmlspecialchars($dramaShows['error']) ?></p>
+                </div>
+            <?php endif; ?>
             <div class="movie-grid">
-                <?php foreach (array_slice($dramaShows, 0, 4) as $item): 
+                <?php 
+                $showsToDisplay = isset($dramaShows['error']) ? [] : array_slice($dramaShows, 0, 4);
+                foreach ($showsToDisplay as $item): 
                     $show = $item['show'] ?? $item;
                 ?>
                     <div class="movie-card">
                         <?php if (isset($show['image']['medium'])): ?>
                             <img src="<?= htmlspecialchars($show['image']['medium']) ?>" alt="<?= htmlspecialchars($show['name']) ?>">
+                        <?php else: ?>
+                            <div style="background: #f0f0f0; height: 300px; display: flex; align-items: center; justify-content: center; color: #666;">
+                                🎬 Нет изображения
+                            </div>
                         <?php endif; ?>
                         <h3><?= htmlspecialchars($show['name'] ?? 'Unknown') ?></h3>
                         <?php if (isset($show['genres'])): ?>
@@ -110,7 +150,7 @@ $dramaShows = $apiClient->searchShows('drama');
             <h3>🔧 Техническая информация</h3>
             <p><strong>Класс ApiClient:</strong> Обрабатывает HTTP запросы к TVMaze API</p>
             <p><strong>Класс UserInfo:</strong> Собирает информацию о пользователе и системе</p>
-            <p><strong>Composer:</strong> Автозагрузка классов через vendor/autoload.php</p>
+            <p><strong>Автозагрузка:</strong> Упрощенная автозагрузка классов через autoload.php</p>
             <p><strong>Куки:</strong> Сохранение времени последнего заказа</p>
         </div>
     </div>

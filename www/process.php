@@ -1,6 +1,11 @@
 ﻿<?php
-session_start();
-require_once __DIR__ . '/../vendor/autoload.php';
+// Переносим session_start в самое начало
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Используем упрощенный автозагрузчик
+require_once __DIR__ . '/autoload.php';
 
 // Инициализируем API клиент
 $apiClient = new ApiClient();

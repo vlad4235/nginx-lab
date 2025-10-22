@@ -1,6 +1,11 @@
 ﻿<?php
-session_start();
-require_once __DIR__ . '/../vendor/autoload.php';
+// Переносим session_start в самое начало
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Используем упрощенный автозагрузчик
+require_once __DIR__ . '/autoload.php';
 
 // Инициализируем классы
 $userInfo = new UserInfo();
@@ -27,6 +32,7 @@ if (!isset($_SESSION['api_data'])) {
         .movie-card img { max-width: 100%; height: auto; border-radius: 5px; }
         .success-message { background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin: 15px 0; }
         .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+        .error { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin: 15px 0; }
     </style>
 </head>
 <body>
@@ -45,7 +51,7 @@ if (!isset($_SESSION['api_data'])) {
             <h3>ℹ️ Информация о системе и пользователе</h3>
             <div class="info-grid">
                 <?php
-                $info = UserInfo::getInfo();
+                $info = $userInfo->getInfo();
                 foreach ($info as $key => $value): 
                 ?>
                     <div>
@@ -64,7 +70,7 @@ if (!isset($_SESSION['api_data'])) {
                 
                 <div>
                     <strong>🌐 Браузер:</strong><br>
-                    <?= htmlspecialchars(UserInfo::getBrowserInfo()) ?>
+                    <?= htmlspecialchars($userInfo->getBrowserInfo()) ?>
                 </div>
             </div>
         </div>
@@ -94,6 +100,17 @@ if (!isset($_SESSION['api_data'])) {
             <p><em>Данные загружаются из публичного API в реальном времени</em></p>
             
             <?php if (isset($_SESSION['api_data']) && is_array($_SESSION['api_data'])): ?>
+                <?php if (isset($_SESSION['api_data']['error'])): ?>
+                    <div class="error">
+                        <p>Ошибка при загрузке данных из API: <?= htmlspecialchars($_SESSION['api_data']['error']) ?></p>
+                        <p>Показываем демо-данные</p>
+                    </div>
+                    <?php 
+                    $showsToDisplay = $apiClient->getFallbackData();
+                    $_SESSION['api_data'] = $showsToDisplay;
+                    ?>
+                <?php endif; ?>
+                
                 <div class="movie-grid">
                     <?php foreach ($_SESSION['api_data'] as $item): 
                         $show = $item['show'] ?? $item;
@@ -132,6 +149,7 @@ if (!isset($_SESSION['api_data'])) {
         <nav>
             <a href="form.html">🎫 Забронировать билеты</a> | 
             <a href="view.php">📋 Посмотреть все заказы</a> |
+            <a href="api.php">🎬 TVMaze API</a> |
             <a href="phpinfo.php">🐘 PHP Info</a>
         </nav>
     </div>

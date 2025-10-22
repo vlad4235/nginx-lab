@@ -1,17 +1,13 @@
 ﻿<?php
-// Переносим session_start в самое начало
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Используем упрощенный автозагрузчик
 require_once __DIR__ . '/autoload.php';
 
-// Инициализируем классы
 $userInfo = new UserInfo();
 $apiClient = new ApiClient();
 
-// Получаем данные API если их еще нет в сессии
 if (!isset($_SESSION['api_data'])) {
     $_SESSION['api_data'] = $apiClient->searchShows('action');
 }
@@ -46,7 +42,6 @@ if (!isset($_SESSION['api_data'])) {
             </div>
         <?php endif; ?>
 
-        <!-- 🔥 НОВЫЙ РАЗДЕЛ: Информация о пользователе -->
         <div class="user-info">
             <h3>ℹ️ Информация о системе и пользователе</h3>
             <div class="info-grid">
@@ -60,7 +55,6 @@ if (!isset($_SESSION['api_data'])) {
                     </div>
                 <?php endforeach; ?>
                 
-                <!-- Информация о куки -->
                 <?php if (isset($_COOKIE['last_order_time'])): ?>
                     <div>
                         <strong>🍪 Последний заказ:</strong><br>
@@ -75,7 +69,6 @@ if (!isset($_SESSION['api_data'])) {
             </div>
         </div>
 
-        <!-- Существующая информация о заказе -->
         <?php if (isset($_SESSION['last_order'])): ?>
         <div class="order-info">
             <h2>Ваш последний заказ:</h2>
@@ -94,7 +87,6 @@ if (!isset($_SESSION['api_data'])) {
         </div>
         <?php endif; ?>
 
-        <!-- 🔥 НОВЫЙ РАЗДЕЛ: Данные из внешнего API -->
         <div class="api-section">
             <h2>🎭 Популярные сериалы (данные из TVMaze API)</h2>
             <p><em>Данные загружаются из публичного API в реальном времени</em></p>

@@ -1,16 +1,13 @@
 ﻿<?php
-// Переносим session_start в самое начало
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Используем упрощенный автозагрузчик
 require_once __DIR__ . '/autoload.php';
 
 $apiClient = new ApiClient();
 $userInfo = new UserInfo();
 
-// Получаем разные категории фильмов
 $actionShows = $apiClient->searchShows('action');
 $comedyShows = $apiClient->searchShows('comedy');
 $dramaShows = $apiClient->searchShows('drama');
@@ -49,7 +46,6 @@ $dramaShows = $apiClient->searchShows('drama');
             <a href="view.php">📋 Заказы</a>
         </nav>
 
-        <!-- Экшн сериалы -->
         <div class="category-section">
             <h2>💥 Экшн сериалы</h2>
             <?php if (isset($actionShows['error'])): ?>
@@ -84,7 +80,6 @@ $dramaShows = $apiClient->searchShows('drama');
             </div>
         </div>
 
-        <!-- Комедийные сериалы -->
         <div class="category-section">
             <h2>😂 Комедийные сериалы</h2>
             <?php if (isset($comedyShows['error'])): ?>
@@ -115,7 +110,6 @@ $dramaShows = $apiClient->searchShows('drama');
             </div>
         </div>
 
-        <!-- Драматические сериалы -->
         <div class="category-section">
             <h2>🎭 Драматические сериалы</h2>
             <?php if (isset($dramaShows['error'])): ?>

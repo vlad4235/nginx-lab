@@ -112,7 +112,7 @@ class ApiClient {
     /**
      * Fallback данные если API недоступно
      */
-    private function getFallbackData() {
+    public function getFallbackData() {
         return [
             [
                 'show' => [

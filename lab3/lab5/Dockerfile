@@ -1,0 +1,12 @@
+﻿FROM php:8.2-fpm
+
+# Устанавливаем расширения для работы с MySQL
+RUN docker-php-ext-install pdo pdo_mysql
+
+WORKDIR /var/www/html
+COPY ./www /var/www/html
+
+# Устанавливаем правильные права
+RUN chown -R www-data:www-data /var/www/html
+
+CMD ["php-fpm"]

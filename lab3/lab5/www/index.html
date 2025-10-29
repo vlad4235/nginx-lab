@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Lab5 - Nginx Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .success { color: green; font-weight: bold; }
+        .container { background: #f5f5f5; padding: 20px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Лабораторная работа №5</h1>
+        <h2>MySQL + PHP + Docker</h2>
+        
+        <div style="background: #d4edda; padding: 15px; border-radius: 5px; margin: 20px 0;">
+            <p class="success">✅ Nginx работает!</p>
+        </div>
+
+        <h3>📄 Доступные страницы:</h3>
+        <ul>
+            <li><a href="/index.php">Главная страница (PHP + MySQL)</a></li>
+            <li><a href="/form.html">Форма бронирования билетов</a></li>
+            <li><a href="/view.php">Просмотр всех заказов</a></li>
+            <li><a href="/test.php">Тест PHP и MySQL</a></li>
+        </ul>
+
+        <h3>🔧 Администрирование:</h3>
+        <ul>
+            <li><a href="http://localhost:8081" target="_blank">Adminer - управление БД</a></li>
+        </ul>
+
+        <div style="margin-top: 30px; padding: 15px; background: #e8f4fd; border-radius: 5px;">
+            <h4>📊 Статус сервисов:</h4>
+            <p><strong>Nginx:</strong> <span class="success">Запущен</span></p>
+            <p><strong>PHP-FPM:</strong> Запущен</p>
+            <p><strong>MySQL:</strong> Запущен (порт 3307)</p>
+            <p><strong>Adminer:</strong> Запущен (порт 8081)</p>
+        </div>
+    </div>
+</body>
+</html>
